@@ -28,8 +28,8 @@ from telegram.ext import (
 #  SOZLAMALAR — bularni o'zgartiring!
 # ─────────────────────────────────────────
 
-BOT_TOKEN   = "SIZNING_BOT_TOKENINGIZ"      # @BotFather dan olingan token
-WEB_APP_URL = "https://SIZNING_URL.github.io/hisoblagich"  # GitHub Pages yoki boshqa hosting
+BOT_TOKEN   = "8516628447:AAFKh4VCAa9fuIGU81DVp19Brg4rc58z7lg"      # @BotFather dan olingan token
+WEB_APP_URL = "https://abdusharipovboburmirzo5-oss.github.io/Files/"  # GitHub Pages havolasi
 
 # ─────────────────────────────────────────
 #  LOGGING

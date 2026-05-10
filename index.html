@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Hisoblagich</title>
+
+  <!-- Telegram Mini App SDK — SHART! -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== SPLASH SCREEN ===== -->
+  <div class="splash" id="splash">
+    <div class="splash-icon">💰</div>
+    <h1 class="splash-title">Hisoblagich</h1>
+    <p class="splash-sub">Kirim · Chiqim · Balans</p>
+  </div>
+
+  <!-- ===== APP WRAPPER ===== -->
+  <div class="app" id="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div>
+        <h1 class="app-title">Hisoblagich</h1>
+      <p class="app-date" id="appDate"></p>
+      </div>
+      <div class="user-badge" id="userBadge"></div>
+    </header>
+
+    <!-- TAB NAV -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="restoran" onclick="switchTab('restoran')">
+        <span class="tab-icon">🍽️</span>
+        <span>Restoran</span>
+      </button>
+      <button class="tab-btn" data-tab="mehmonxona" onclick="switchTab('mehmonxona')">
+        <span class="tab-icon">🏨</span>
+        <span>Mehmonxona</span>
+      </button>
+      <button class="tab-btn" data-tab="shaxsiy" onclick="switchTab('shaxsiy')">
+        <span class="tab-icon">👤</span>
+        <span>Shaxsiy</span>
+      </button>
+    </nav>
+
+    <!-- ===== RESTORAN TAB ===== -->
+    <section class="tab-panel active" id="tab-restoran">
+      <div class="summary-cards">
+        <div class="card card-balance">
+          <p class="card-label">Balans</p>
+          <p class="card-amount" id="restoran-balance">0 so'm</p>
+        </div>
+        <div class="card card-income">
+          <p class="card-label">⬆ Kirim</p>
+          <p class="card-amount" id="restoran-income">0 so'm</p>
+        </div>
+        <div class="card card-expense">
+          <p class="card-label">⬇ Chiqim</p>
+          <p class="card-amount" id="restoran-expense">0 so'm</p>
+        </div>
+      </div>
+
+      <div class="form-box">
+        <h3 class="form-title">Yangi yozuv</h3>
+        <input class="input-field" type="text" id="restoran-desc" placeholder="Tavsif (masalan: Tushlik)" />
+        <input class="input-field" type="number" id="restoran-amount" placeholder="Summa (so'm)" />
+        <div class="form-btns">
+          <button class="btn btn-income" onclick="addEntry('restoran', 'income')">+ Kirim</button>
+          <button class="btn btn-expense" onclick="addEntry('restoran', 'expense')">− Chiqim</button>
+        </div>
+      </div>
+
+      <div class="history-box">
+        <div class="history-header">
+          <h3 class="history-title">Tarix</h3>
+          <button class="clear-btn" onclick="clearAll('restoran')">Tozalash</button>
+        </div>
+        <ul class="history-list" id="restoran-list">
+          <li class="empty-msg">Hali yozuv yo'q</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== MEHMONXONA TAB ===== -->
+    <section class="tab-panel" id="tab-mehmonxona">
+      <div class="summary-cards">
+        <div class="card card-balance">
+          <p class="card-label">Balans</p>
+          <p class="card-amount" id="mehmonxona-balance">0 so'm</p>
+        </div>
+        <div class="card card-income">
+          <p class="card-label">⬆ Kirim</p>
+          <p class="card-amount" id="mehmonxona-income">0 so'm</p>
+        </div>
+        <div class="card card-expense">
+          <p class="card-label">⬇ Chiqim</p>
+          <p class="card-amount" id="mehmonxona-expense">0 so'm</p>
+        </div>
+      </div>
+
+      <div class="form-box">
+        <h3 class="form-title">Yangi yozuv</h3>
+        <input class="input-field" type="text" id="mehmonxona-desc" placeholder="Tavsif (masalan: Xona haqi)" />
+        <input class="input-field" type="number" id="mehmonxona-amount" placeholder="Summa (so'm)" />
+        <div class="form-btns">
+          <button class="btn btn-income" onclick="addEntry('mehmonxona', 'income')">+ Kirim</button>
+          <button class="btn btn-expense" onclick="addEntry('mehmonxona', 'expense')">− Chiqim</button>
+        </div>
+      </div>
+
+      <div class="history-box">
+        <div class="history-header">
+          <h3 class="history-title">Tarix</h3>
+          <button class="clear-btn" onclick="clearAll('mehmonxona')">Tozalash</button>
+        </div>
+        <ul class="history-list" id="mehmonxona-list">
+          <li class="empty-msg">Hali yozuv yo'q</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== SHAXSIY TAB ===== -->
+    <section class="tab-panel" id="tab-shaxsiy">
+      <div class="summary-cards">
+        <div class="card card-balance">
+          <p class="card-label">Balans</p>
+          <p class="card-amount" id="shaxsiy-balance">0 so'm</p>
+        </div>
+        <div class="card card-income">
+          <p class="card-label">⬆ Kirim</p>
+          <p class="card-amount" id="shaxsiy-income">0 so'm</p>
+        </div>
+        <div class="card card-expense">
+          <p class="card-label">⬇ Chiqim</p>
+          <p class="card-amount" id="shaxsiy-expense">0 so'm</p>
+        </div>
+      </div>
+
+      <div class="form-box">
+        <h3 class="form-title">Yangi yozuv</h3>
+        <input class="input-field" type="text" id="shaxsiy-desc" placeholder="Tavsif (masalan: Maosh)" />
+        <input class="input-field" type="number" id="shaxsiy-amount" placeholder="Summa (so'm)" />
+        <div class="form-btns">
+          <button class="btn btn-income" onclick="addEntry('shaxsiy', 'income')">+ Kirim</button>
+          <button class="btn btn-expense" onclick="addEntry('shaxsiy', 'expense')">− Chiqim</button>
+        </div>
+      </div>
+
+      <div class="history-box">
+        <div class="history-header">
+          <h3 class="history-title">Tarix</h3>
+          <button class="clear-btn" onclick="clearAll('shaxsiy')">Tozalash</button>
+        </div>
+        <ul class="history-list" id="shaxsiy-list">
+          <li class="empty-msg">Hali yozuv yo'q</li>
+        </ul>
+      </div>
+    </section>
+
+  </div><!-- /.app -->
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

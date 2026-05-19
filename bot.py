@@ -29,7 +29,7 @@ from telegram.ext import (
 # ─────────────────────────────────────────
 
 BOT_TOKEN   = "8516628447:AAFKh4VCAa9fuIGU81DVp19Brg4rc58z7lg"      # @BotFather dan olingan token
-WEB_APP_URL = "https://abdusharipovboburmirzo5-oss.github.io/Files/"  # GitHub Pages havolasi
+WEB_APP_URL = "https://shoxjoxonatayev-droid.github.io/hisoblash_bot"  # GitHub Pages havolasi
 
 # ─────────────────────────────────────────
 #  LOGGING

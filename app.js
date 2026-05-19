@@ -1,16 +1,16 @@
 /* =============================================
-   HISOBLAGICH — app.js
+   HISOBLAGICH — app.js (Bot integratsiyali)
    ============================================= */
 
-// ---- STATE ----
-// Each section stores its own entries independently
 const SECTIONS = ['restoran', 'mehmonxona', 'shaxsiy'];
 
 const state = {
-  restoran:    [],
-  mehmonxona:  [],
-  shaxsiy:     []
+  restoran:   [],
+  mehmonxona: [],
+  shaxsiy:    []
 };
+
+let tg = null;
 
 // ---- INIT ----
 document.addEventListener('DOMContentLoaded', () => {
@@ -21,25 +21,54 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // =============================================
-// TELEGRAM MINI APP INTEGRATSIYASI
+// TELEGRAM MINI APP
 // =============================================
 function initTelegram() {
   if (!window.Telegram || !window.Telegram.WebApp) return;
-  const tg = window.Telegram.WebApp;
-  tg.expand();   // to'liq ekran
-  tg.ready();    // Telegram ga tayyor signal
+  tg = window.Telegram.WebApp;
+  tg.expand();
+  tg.ready();
 
-  // Foydalanuvchi ismini header da ko'rsatish
+  // Foydalanuvchi ismi
   const user = tg.initDataUnsafe && tg.initDataUnsafe.user;
   if (user) {
     const badge = document.getElementById('userBadge');
     if (badge) badge.textContent = '👤 ' + (user.first_name || 'Foydalanuvchi');
+  }
+
+  // Main button — Saqlash
+  tg.MainButton.setText('💾 Botga saqlash');
+  tg.MainButton.color = '#2CA5E0';
+  tg.MainButton.show();
+  tg.MainButton.onClick(sendDataToBot);
+}
+
+// =============================================
+// BOTGA MA'LUMOT YUBORISH
+// =============================================
+function sendDataToBot() {
+  if (!tg) {
+    showToast('⚠️ Telegram WebApp topilmadi');
+    return;
+  }
+  const hasData = SECTIONS.some(s => state[s].length > 0);
+  if (!hasData) {
+    showToast('ℹ️ Hali hech qanday yozuv yo\'q');
+    return;
+  }
+  tg.MainButton.showProgress(false);
+  try {
+    tg.sendData(JSON.stringify(state));
+  } catch(e) {
+    tg.MainButton.hideProgress();
+    showToast('⚠️ Yuborishda xato: ' + e.message);
   }
 }
 
 // ---- DATE ----
 function setDate() {
   const el = document.getElementById('appDate');
+  if (!el) return;
   const now = new Date();
   el.textContent = now.toLocaleDateString('uz-UZ', {
     year: 'numeric', month: 'long', day: 'numeric'
@@ -50,12 +79,9 @@ function setDate() {
 // TAB SWITCHING
 // =============================================
 function switchTab(tab) {
-  // Update buttons
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tab);
   });
-
-  // Update panels
   document.querySelectorAll('.tab-panel').forEach(panel => {
     panel.classList.toggle('active', panel.id === 'tab-' + tab);
   });
@@ -71,7 +97,6 @@ function addEntry(section, type) {
   const desc   = descEl.value.trim();
   const amount = parseFloat(amountEl.value);
 
-  // Validation
   if (!desc) {
     showToast('⚠️ Tavsif kiriting!');
     descEl.focus();
@@ -83,23 +108,18 @@ function addEntry(section, type) {
     return;
   }
 
-  // Create entry object
   const entry = {
     id:     Date.now(),
     desc:   desc,
     amount: amount,
-    type:   type,        // 'income' | 'expense'
+    type:   type,
     time:   getNowTime()
   };
 
-  // Add to state
   state[section].unshift(entry);
-
-  // Persist & re-render
   saveToStorage();
   renderSection(section);
 
-  // Clear inputs
   descEl.value   = '';
   amountEl.value = '';
   descEl.focus();
@@ -136,12 +156,11 @@ function clearAll(section) {
 }
 
 // =============================================
-// RENDER SECTION (Cards + List)
+// RENDER SECTION
 // =============================================
 function renderSection(section) {
   const entries = state[section];
 
-  // Calculate totals
   let totalIncome  = 0;
   let totalExpense = 0;
 
@@ -152,12 +171,10 @@ function renderSection(section) {
 
   const balance = totalIncome - totalExpense;
 
-  // Update summary cards
   document.getElementById(section + '-balance').textContent  = formatMoney(balance);
   document.getElementById(section + '-income').textContent   = formatMoney(totalIncome);
   document.getElementById(section + '-expense').textContent  = formatMoney(totalExpense);
 
-  // Update list
   const listEl = document.getElementById(section + '-list');
   listEl.innerHTML = '';
 
@@ -187,15 +204,12 @@ function renderSection(section) {
 // =============================================
 // HELPERS
 // =============================================
-
-/** Format number with thousands separator + so'm */
 function formatMoney(amount) {
   const num = Math.abs(amount);
   const formatted = num.toLocaleString('uz-UZ');
   return (amount < 0 ? '−' : '') + formatted + ' so\'m';
 }
 
-/** Current time as HH:MM */
 function getNowTime() {
   const now = new Date();
   const hh  = String(now.getHours()).padStart(2, '0');
@@ -205,7 +219,6 @@ function getNowTime() {
   return `${dd}/${mo}  ${hh}:${mm}`;
 }
 
-/** Escape HTML to prevent XSS */
 function escapeHtml(str) {
   return str
     .replace(/&/g, '&amp;')
@@ -223,13 +236,12 @@ function showToast(msg) {
   const toast = document.getElementById('toast');
   toast.textContent = msg;
   toast.classList.add('show');
-
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
 // =============================================
-// LOCAL STORAGE — persistence across sessions
+// LOCAL STORAGE
 // =============================================
 const STORAGE_KEY = 'hisoblagich_v1';
 

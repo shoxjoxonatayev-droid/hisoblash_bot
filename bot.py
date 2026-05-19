@@ -15,9 +15,9 @@ from telegram.ext import (
 # ═══════════════════════════════════════════
 #  SOZLAMALAR
 # ═══════════════════════════════════════════
-BOT_TOKEN   = os.environ.get("BOT_TOKEN", "")
-WEB_APP_URL = os.environ.get("WEB_APP_URL", "https://example.com")
-ADMIN_ID    = int(os.environ.get("ADMIN_ID", "0"))  # Sizning Telegram ID ingiz
+BOT_TOKEN   = os.environ.get("BOT_TOKEN", "8516628447:AAFKh4VCAa9fuIGU81DVp19Brg4rc58z7lg")
+WEB_APP_URL = os.environ.get("WEB_APP_URL", "https://shoxjoxonatayev-droid.github.io/hisoblash_bot/")
+ADMIN_ID    = int(os.environ.get("ADMIN_ID", "7579886970"))  # Sizning Telegram ID ingiz
 
 if not BOT_TOKEN:
     print("❌ XATO: BOT_TOKEN environment variable o'rnatilmagan!", flush=True)
